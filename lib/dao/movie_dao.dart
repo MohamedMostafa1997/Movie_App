@@ -4,24 +4,24 @@ import 'package:movie_app/entity/movie.dart';
 @dao 
 abstract class MovieDao {
 
-@Query('SELECT * FROM Moive')
+@Query('SELECT * FROM Movie')
 Stream<List<Movie>> getAllMovie();
 
 
-@Query('SELECT * FROM Moive WHERE id = :id')
+@Query('SELECT * FROM Movie WHERE id = :id')
 Future<Movie?>getMovieById(int id);
 
 
-@Query('DELETE FROM Moive')
+@Query('DELETE FROM Movie')
 Future<void> delteAllMovies();
 
 @insert 
-Future<void> insertMovie(Movie moive);
+Future<void> insertMovie(Movie movie);
 
 @update
-Future<void> updateMovie(Movie moive);
+Future<void> updateMovie(Movie movie);
 
 @delete
-Future<void> deleteMovie(Movie moive);
+Future<void> deleteMovie(Movie movie);
 
 }

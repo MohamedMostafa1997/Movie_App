@@ -6,33 +6,33 @@ part of 'database.dart';
 // FloorGenerator
 // **************************************************************************
 
-abstract class $MoiveDatabaseBuilderContract {
+abstract class $MovieDatabaseBuilderContract {
   /// Adds migrations to the builder.
-  $MoiveDatabaseBuilderContract addMigrations(List<Migration> migrations);
+  $MovieDatabaseBuilderContract addMigrations(List<Migration> migrations);
 
   /// Adds a database [Callback] to the builder.
-  $MoiveDatabaseBuilderContract addCallback(Callback callback);
+  $MovieDatabaseBuilderContract addCallback(Callback callback);
 
   /// Creates the database and initializes it.
   Future<MovieDatabase> build();
 }
 
 // ignore: avoid_classes_with_only_static_members
-class $FloorMoiveDatabase {
+class $FloorMovieDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static $MoiveDatabaseBuilderContract databaseBuilder(String name) =>
-      _$MoiveDatabaseBuilder(name);
+  static $MovieDatabaseBuilderContract databaseBuilder(String name) =>
+      _$MovieDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static $MoiveDatabaseBuilderContract inMemoryDatabaseBuilder() =>
-      _$MoiveDatabaseBuilder(null);
+  static $MovieDatabaseBuilderContract inMemoryDatabaseBuilder() =>
+      _$MovieDatabaseBuilder(null);
 }
 
-class _$MoiveDatabaseBuilder implements $MoiveDatabaseBuilderContract {
-  _$MoiveDatabaseBuilder(this.name);
+class _$MovieDatabaseBuilder implements $MovieDatabaseBuilderContract {
+  _$MovieDatabaseBuilder(this.name);
 
   final String? name;
 
@@ -41,13 +41,13 @@ class _$MoiveDatabaseBuilder implements $MoiveDatabaseBuilderContract {
   Callback? _callback;
 
   @override
-  $MoiveDatabaseBuilderContract addMigrations(List<Migration> migrations) {
+  $MovieDatabaseBuilderContract addMigrations(List<Migration> migrations) {
     _migrations.addAll(migrations);
     return this;
   }
 
   @override
-  $MoiveDatabaseBuilderContract addCallback(Callback callback) {
+  $MovieDatabaseBuilderContract addCallback(Callback callback) {
     _callback = callback;
     return this;
   }
@@ -57,7 +57,7 @@ class _$MoiveDatabaseBuilder implements $MoiveDatabaseBuilderContract {
     final path = name != null
         ? await sqfliteDatabaseFactory.getDatabasePath(name!)
         : ':memory:';
-    final database = _$MoiveDatabase();
+    final database = _$MovieDatabase();
     database.database = await database.open(
       path,
       _migrations,
@@ -67,8 +67,8 @@ class _$MoiveDatabaseBuilder implements $MoiveDatabaseBuilderContract {
   }
 }
 
-class _$MoiveDatabase extends MovieDatabase {
-  _$MoiveDatabase([StreamController<String>? listener]) {
+class _$MovieDatabase extends MovieDatabase {
+  _$MovieDatabase([StreamController<String>? listener]) {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
@@ -96,7 +96,7 @@ class _$MoiveDatabase extends MovieDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `Moive` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `poster` TEXT NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `Movie` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `poster` TEXT NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -115,18 +115,18 @@ class _$MovieDao extends MovieDao {
     this.database,
     this.changeListener,
   )   : _queryAdapter = QueryAdapter(database, changeListener),
-        _moiveInsertionAdapter = InsertionAdapter(
+        _movieInsertionAdapter = InsertionAdapter(
             database,
-            'Moive',
+            'Movie',
             (Movie item) => <String, Object?>{
                   'id': item.id,
                   'title': item.title,
                   'poster': item.poster
                 },
             changeListener),
-        _moiveUpdateAdapter = UpdateAdapter(
+        _movieUpdateAdapter = UpdateAdapter(
             database,
-            'Moive',
+            'Movie',
             ['id'],
             (Movie item) => <String, Object?>{
                   'id': item.id,
@@ -134,9 +134,9 @@ class _$MovieDao extends MovieDao {
                   'poster': item.poster
                 },
             changeListener),
-        _moiveDeletionAdapter = DeletionAdapter(
+        _movieDeletionAdapter = DeletionAdapter(
             database,
-            'Moive',
+            'Movie',
             ['id'],
             (Movie item) => <String, Object?>{
                   'id': item.id,
@@ -151,11 +151,11 @@ class _$MovieDao extends MovieDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Movie> _moiveInsertionAdapter;
+  final InsertionAdapter<Movie> _movieInsertionAdapter;
 
-  final UpdateAdapter<Movie> _moiveUpdateAdapter;
+  final UpdateAdapter<Movie> _movieUpdateAdapter;
 
-  final DeletionAdapter<Movie> _moiveDeletionAdapter;
+  final DeletionAdapter<Movie> _movieDeletionAdapter;
 
   @override
   Stream<List<Movie>> getAllMovie() {
@@ -185,16 +185,16 @@ class _$MovieDao extends MovieDao {
 
   @override
   Future<void> insertMovie(Movie moive) async {
-    await _moiveInsertionAdapter.insert(moive, OnConflictStrategy.abort);
+    await _movieInsertionAdapter.insert(moive, OnConflictStrategy.abort);
   }
 
   @override
   Future<void> updateMovie(Movie moive) async {
-    await _moiveUpdateAdapter.update(moive, OnConflictStrategy.abort);
+    await _movieUpdateAdapter.update(moive, OnConflictStrategy.abort);
   }
 
   @override
   Future<void> deleteMovie(Movie moive) async {
-    await _moiveDeletionAdapter.delete(moive);
+    await _movieDeletionAdapter.delete(moive);
   }
 }

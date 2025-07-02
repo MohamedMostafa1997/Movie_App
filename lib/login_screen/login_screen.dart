@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/app_routes.dart';
 import 'package:movie_app/login_screen/login_error_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
       await prefs.setBool('isLoggedIn', true);
 
       if (!mounted) return;
-      Navigator.popAndPushNamed(context, '/homescreen');
+      Navigator.popAndPushNamed(context,AppRoutes.home);
     } else {
       showDialog(
         context: context,
