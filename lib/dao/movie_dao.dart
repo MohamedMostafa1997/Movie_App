@@ -1,27 +1,27 @@
 import 'package:floor/floor.dart';
-import 'package:movie_app/enitiy/movie.dart';
+import 'package:movie_app/entity/movie.dart';
 
 @dao 
 abstract class MovieDao {
 
 @Query('SELECT * FROM Moive')
-Stream<List<Moive>> getAllMoive();
+Stream<List<Movie>> getAllMovie();
 
 
 @Query('SELECT * FROM Moive WHERE id = :id')
-Future<Moive?>getMovieById(int id);
+Future<Movie?>getMovieById(int id);
 
 
 @Query('DELETE FROM Moive')
-Future<void> delteAllMoives();
+Future<void> delteAllMovies();
 
 @insert 
-Future<void> insertMoive(Moive moive);
+Future<void> insertMovie(Movie moive);
 
 @update
-Future<void> updateMoive(Moive moive);
+Future<void> updateMovie(Movie moive);
 
 @delete
-Future<void> deleteMoive(Moive moive);
+Future<void> deleteMovie(Movie moive);
 
 }

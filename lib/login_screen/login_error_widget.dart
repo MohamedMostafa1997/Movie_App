@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginErrorDialog extends StatelessWidget {
-  final String message ;
+  final String message;
 
   const LoginErrorDialog({required this.message, super.key});
 
@@ -11,10 +11,11 @@ class LoginErrorDialog extends StatelessWidget {
       title: Text('Login Error'),
       content: Text(message),
       actions: [
-        TextButton(onPressed: () => Navigator.pop(context), 
-        child: Text(" Ok !"))
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(" Ok !"),
+        ),
       ],
-
     );
   }
 }

@@ -14,7 +14,7 @@ abstract class $MoiveDatabaseBuilderContract {
   $MoiveDatabaseBuilderContract addCallback(Callback callback);
 
   /// Creates the database and initializes it.
-  Future<MoiveDatabase> build();
+  Future<MovieDatabase> build();
 }
 
 // ignore: avoid_classes_with_only_static_members
@@ -53,7 +53,7 @@ class _$MoiveDatabaseBuilder implements $MoiveDatabaseBuilderContract {
   }
 
   @override
-  Future<MoiveDatabase> build() async {
+  Future<MovieDatabase> build() async {
     final path = name != null
         ? await sqfliteDatabaseFactory.getDatabasePath(name!)
         : ':memory:';
@@ -67,7 +67,7 @@ class _$MoiveDatabaseBuilder implements $MoiveDatabaseBuilderContract {
   }
 }
 
-class _$MoiveDatabase extends MoiveDatabase {
+class _$MoiveDatabase extends MovieDatabase {
   _$MoiveDatabase([StreamController<String>? listener]) {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
@@ -118,7 +118,7 @@ class _$MovieDao extends MovieDao {
         _moiveInsertionAdapter = InsertionAdapter(
             database,
             'Moive',
-            (Moive item) => <String, Object?>{
+            (Movie item) => <String, Object?>{
                   'id': item.id,
                   'title': item.title,
                   'poster': item.poster
@@ -128,7 +128,7 @@ class _$MovieDao extends MovieDao {
             database,
             'Moive',
             ['id'],
-            (Moive item) => <String, Object?>{
+            (Movie item) => <String, Object?>{
                   'id': item.id,
                   'title': item.title,
                   'poster': item.poster
@@ -138,7 +138,7 @@ class _$MovieDao extends MovieDao {
             database,
             'Moive',
             ['id'],
-            (Moive item) => <String, Object?>{
+            (Movie item) => <String, Object?>{
                   'id': item.id,
                   'title': item.title,
                   'poster': item.poster
@@ -151,16 +151,16 @@ class _$MovieDao extends MovieDao {
 
   final QueryAdapter _queryAdapter;
 
-  final InsertionAdapter<Moive> _moiveInsertionAdapter;
+  final InsertionAdapter<Movie> _moiveInsertionAdapter;
 
-  final UpdateAdapter<Moive> _moiveUpdateAdapter;
+  final UpdateAdapter<Movie> _moiveUpdateAdapter;
 
-  final DeletionAdapter<Moive> _moiveDeletionAdapter;
+  final DeletionAdapter<Movie> _moiveDeletionAdapter;
 
   @override
-  Stream<List<Moive>> getAllMoive() {
+  Stream<List<Movie>> getAllMovie() {
     return _queryAdapter.queryListStream('SELECT * FROM Moive',
-        mapper: (Map<String, Object?> row) => Moive(
+        mapper: (Map<String, Object?> row) => Movie(
             id: row['id'] as int?,
             title: row['title'] as String,
             poster: row['poster'] as String),
@@ -169,9 +169,9 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
-  Future<Moive?> getMovieById(int id) async {
+  Future<Movie?> getMovieById(int id) async {
     return _queryAdapter.query('SELECT * FROM Moive WHERE id = ?1',
-        mapper: (Map<String, Object?> row) => Moive(
+        mapper: (Map<String, Object?> row) => Movie(
             id: row['id'] as int?,
             title: row['title'] as String,
             poster: row['poster'] as String),
@@ -179,22 +179,22 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
-  Future<void> delteAllMoives() async {
+  Future<void> delteAllMovies() async {
     await _queryAdapter.queryNoReturn('DELETE FROM Moive');
   }
 
   @override
-  Future<void> insertMoive(Moive moive) async {
+  Future<void> insertMovie(Movie moive) async {
     await _moiveInsertionAdapter.insert(moive, OnConflictStrategy.abort);
   }
 
   @override
-  Future<void> updateMoive(Moive moive) async {
+  Future<void> updateMovie(Movie moive) async {
     await _moiveUpdateAdapter.update(moive, OnConflictStrategy.abort);
   }
 
   @override
-  Future<void> deleteMoive(Moive moive) async {
+  Future<void> deleteMovie(Movie moive) async {
     await _moiveDeletionAdapter.delete(moive);
   }
 }

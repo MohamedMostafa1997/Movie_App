@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/database/database.dart' show MoiveDatabase;
+import 'package:movie_app/database/database.dart' show MovieDatabase;
 import 'package:movie_app/home_screen/home_screen.dart';
 import 'package:movie_app/login_screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Launch extends StatelessWidget {
 
-  final MoiveDatabase database;
+  final MovieDatabase database;
   const Launch({super.key,required this.database});
   
   Future<bool> checkLoginStatus() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("isLoggedIn") ?? false ;
   }
 

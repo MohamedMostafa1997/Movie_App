@@ -1,10 +1,9 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:movie_app/entity/movie.dart';
 
-class MovieData {
-  String? movieTittle;
-  String? moviePoster;
-  List<Map<String, String>> moiveData = [];
+class HomeScreenRepo {
+  List<Movie> movies = [];
 
   Future getMovieData() async {
     try {
@@ -19,32 +18,24 @@ class MovieData {
       }
 
       Map<String, dynamic> data = jsonDecode(response.body);
+      List<dynamic> results = data['results'];
+      
+      
 
-      return data['results'];
-    } on Exception catch (e) {
-      throw Exception(" Network Error : $e");
+      movies= setMovieData(results);
+      return movies;
+    } catch (e) {
+      return Exception(" Network Error : $e");
     }
   }
 
-  Future setMoiveDate() async {
-    try {
-            List <dynamic>  dataList = await getMovieData() ;
-
-            for (var moive in dataList){
-
-              moive['poster_path'] = "https://image.tmdb.org/t/p/w500/${moive['poster_path']}";
-            
-              moiveData.add({
-                'title': moive['original_title'],
-                'poster':moive['poster_path']
-              }
-             
-              );
-  
-            }
-
-    } on Exception catch (e) {
-      throw Exception(" Parsing Error : $e ");
-    }
+  List<Movie> setMovieData(List<dynamic> results) {
+    return results.map<Movie>((movieJson) {
+ 
+      return Movie(
+        title: movieJson['original_title'],
+        poster: "https://image.tmdb.org/t/p/w500/${movieJson['poster_path']}",
+      );
+    }).toList();
   }
 }

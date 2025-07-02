@@ -1,13 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:movie_app/app_routes.dart';
 import 'package:movie_app/database/database.dart';
-import 'package:movie_app/enitiy/movie.dart';
+import 'package:movie_app/entity/movie.dart';
 import 'package:movie_app/home_screen/error_widget.dart';
 import 'package:movie_app/home_screen/home_screen_repo.dart';
 
 class HomeScreen extends StatefulWidget {
-  final MoiveDatabase database;
+  final MovieDatabase database;
   const HomeScreen({super.key, required this.database});
 
   @override
@@ -17,24 +17,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? errorMessage;
 
-  MovieData movieData = MovieData();
+  HomeScreenRepo homeScreenRepo = HomeScreenRepo();
 
-  List<Map<String, String>> moivesList = [];
+  List<Movie> moviesList = [];
 
-  List<Moive> favoritesMovies = [];
+  List<Movie> favoritesMovies = [];
 
   late Future<void> loadMovies;
-  late StreamSubscription<List<Moive>> favoritesSubscription;
+  late StreamSubscription<List<Movie>> favoritesSubscription;
 
-  Future<void> fetchMoiveDate() async {
+  Future<void> fetchMovieData() async {
     try {
-      await movieData.setMoiveDate();
-      moivesList = movieData.moiveData;
+      
+      moviesList = await homeScreenRepo.getMovieData();
+
       errorMessage = null;
 
       setState(() {});
     } catch (e) {
-      errorMessage = "Failed to load Moive data. Please check your connection.";
+      errorMessage = "Failed to load Movie data. Please check your connection.";
       setState(() {});
     }
   }
@@ -47,14 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
     final bool isFav = isFavorite(title);
 
     if (isFav) {
-      final moive = favoritesMovies.firstWhere(
+      final Movie movie = favoritesMovies.firstWhere(
         (favoritesMovieTitle) => favoritesMovieTitle.title == title,
       );
 
-      await widget.database.movieDao.deleteMoive(moive);
+      await widget.database.movieDao.deleteMovie(movie);
     } else {
-      await widget.database.movieDao.insertMoive(
-        Moive(title: title, poster: poster),
+      await widget.database.movieDao.insertMovie(
+        Movie(title: title, poster: poster),
       );
     }
   }
@@ -62,13 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    loadMovies = fetchMoiveDate();
+    loadMovies = fetchMovieData();
 
-    favoritesSubscription = widget.database.movieDao.getAllMoive().listen((
+    favoritesSubscription = widget.database.movieDao.getAllMovie().listen((
       favList,
     ) {
       setState(() {
-        favoritesMovies = favList;
+        favoritesMovies =  favList;
       });
     });
   }
@@ -90,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.pushNamed(context, '/favoritesscreen');
+                Navigator.pushNamed(context, AppRoutes.favorite);
               },
               icon: Icon(Icons.favorite, size: 13),
               label: Text(" My Favorites", style: TextStyle(fontSize: 14)),
@@ -117,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onRetry: () {
                 setState(() {
                   errorMessage = null;
-                  loadMovies = fetchMoiveDate();
+                  loadMovies = fetchMovieData();
                 });
               },
             );
@@ -126,11 +127,11 @@ class _HomeScreenState extends State<HomeScreen> {
             return Center(child: CircularProgressIndicator());
           }
           return ListView.builder(
-            itemCount: moivesList.length,
+            itemCount: moviesList.length,
             itemBuilder: (context, index) {
-              final Map<String, String> movie = moivesList[index];
-              final String title = movie['title']!;
-              final String poster = movie['poster']!;
+              final Movie movie = moviesList[index];
+              final String title = movie.title;
+              final String poster = movie.poster;
               final bool isFav = isFavorite(title);
 
               return Card(

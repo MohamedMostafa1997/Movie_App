@@ -2,7 +2,7 @@ import 'package:floor/floor.dart';
 
 
 @entity
-class Moive {
+class Movie {
   @PrimaryKey(autoGenerate: true)
   final int? id ; 
 
@@ -10,6 +10,6 @@ class Moive {
   final String poster;
 
 
-  Moive({this.id ,required this.title,required this.poster, });
+  Movie({this.id ,required this.title,required this.poster, });
   
 }
