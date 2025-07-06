@@ -179,7 +179,7 @@ class _$MovieDao extends MovieDao {
   }
 
   @override
-  Future<void> delteAllMovies() async {
+  Future<void> deleteAllMovies() async {
     await _queryAdapter.queryNoReturn('DELETE FROM Movie');
   }
 

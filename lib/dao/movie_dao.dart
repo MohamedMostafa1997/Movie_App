@@ -13,7 +13,7 @@ Future<Movie?>getMovieById(int id);
 
 
 @Query('DELETE FROM Movie')
-Future<void> delteAllMovies();
+Future<void> deleteAllMovies();
 
 @insert 
 Future<void> insertMovie(Movie movie);
