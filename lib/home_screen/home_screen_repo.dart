@@ -6,7 +6,7 @@ class HomeScreenRepo {
   List<Movie> movies = [];
 
   Future getMovieData() async {
-    try {
+ 
       Response response = await get(
         Uri.parse(
           "https://api.themoviedb.org/3/movie/popular?api_key=53265ddd3b650dc47ec03e250ad91b90",
@@ -14,7 +14,7 @@ class HomeScreenRepo {
       );
 
       if (response.statusCode != 200) {
-        throw Exception("Failed to load Movie data: ${response.statusCode}");
+        throw Exception();
       }
 
       Map<String, dynamic> data = jsonDecode(response.body);
@@ -24,9 +24,7 @@ class HomeScreenRepo {
 
       movies= setMovieData(results);
       return movies;
-    } catch (e) {
-      return Exception(" Network Error : $e");
-    }
+   
   }
 
   List<Movie> setMovieData(List<dynamic> results) {

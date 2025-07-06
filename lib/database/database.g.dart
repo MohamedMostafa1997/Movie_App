@@ -159,18 +159,18 @@ class _$MovieDao extends MovieDao {
 
   @override
   Stream<List<Movie>> getAllMovie() {
-    return _queryAdapter.queryListStream('SELECT * FROM Moive',
+    return _queryAdapter.queryListStream('SELECT * FROM Movie',
         mapper: (Map<String, Object?> row) => Movie(
             id: row['id'] as int?,
             title: row['title'] as String,
             poster: row['poster'] as String),
-        queryableName: 'Moive',
+        queryableName: 'Movie',
         isView: false);
   }
 
   @override
   Future<Movie?> getMovieById(int id) async {
-    return _queryAdapter.query('SELECT * FROM Moive WHERE id = ?1',
+    return _queryAdapter.query('SELECT * FROM Movie WHERE id = ?1',
         mapper: (Map<String, Object?> row) => Movie(
             id: row['id'] as int?,
             title: row['title'] as String,
@@ -180,7 +180,7 @@ class _$MovieDao extends MovieDao {
 
   @override
   Future<void> delteAllMovies() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM Moive');
+    await _queryAdapter.queryNoReturn('DELETE FROM Movie');
   }
 
   @override
